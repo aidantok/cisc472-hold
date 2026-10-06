@@ -300,7 +300,6 @@ def booking_detail(booking_id):
     return render_template("booking.html", booking=booking)
 
 
-@app.get("/bookings/<int:booking_id>/cancel")
 @app.post("/bookings/<int:booking_id>/cancel")
 @login_required
 def cancel_booking(booking_id):
@@ -318,8 +317,6 @@ def cancel_booking(booking_id):
     flash("Booking cancelled.")
     return redirect(url_for("mine"))
 
-
-@app.get("/bookings/<int:booking_id>/transfer")
 @app.post("/bookings/<int:booking_id>/transfer")
 @login_required
 def transfer_booking(booking_id):
