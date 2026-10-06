@@ -34,7 +34,10 @@ def login_required(fn):
 def load_user():
     init_db()
     seed()
-    token = request.args.get("sid") or request.cookies.get("hold_session")
+
+    # Prevent URL-based cookie authentication
+    token = request.cookies.get("hold_session")
+    
     g.user = None
     g.session_token = None
     if not token:
@@ -60,8 +63,9 @@ def persist_session_cookie(response):
         response.set_cookie(
             "hold_session",
             g.session_token,
-            httponly=False,
-            samesite=None,
+            httponly=True, # Prevent JavaScript from accessing cookie/session info
+            secure=True, # Only send cookie over encrypted, secure HTTPS connection rather than HTTP
+            samesite="Lax", # Blocks cross-site requests (like POST requests); prevents state-changing requests
             path="/",
             max_age=60 * 60 * 24 * 14,
         )
